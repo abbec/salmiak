@@ -2,7 +2,7 @@
 
 # Change these when we want other versions
 BINUTILS_EXPECTED_VERSION="0.1.6"
-XBUILD_EXPECTED_VERSION="0.5.1"
+XBUILD_EXPECTED_VERSION="0.5.8"
 
 PACKAGES=""
 VERSIONS=$(cargo install --list)
