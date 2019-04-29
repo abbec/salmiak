@@ -1,0 +1,11 @@
+[package]
+name = "sneka"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+salmiak = { path = "../salmiak" }
+
+[package.metadata.cargo-xbuild]
+memcpy = true
+sysroot_path = "target/sysroot"

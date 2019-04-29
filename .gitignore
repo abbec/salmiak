@@ -1,0 +1,5 @@
+Cargo.lock
+target/
+toolchain-build/
+qemu-build/
+kernel8.img
