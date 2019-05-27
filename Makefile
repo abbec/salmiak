@@ -26,7 +26,7 @@ test:
 	cargo test
 
 format:
-	cargo fmt -- --version
+	cargo fmt --version
 	cargo fmt -- --check
 
 clean:

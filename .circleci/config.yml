@@ -3,35 +3,46 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: rust
+      - image: rustlang/rust:nightly
     steps:
-      - run: rustup toolchain install nightly && rustup default nightly
       - run: rustup component add rust-src llvm-tools-preview
       - checkout
-      - run: .ci/install-or-update-rust-deps.sh
-      - run: make
+      - restore_cache:
+          keys:
+            - cargo-build-cache
+      - run: CARGO_HOME=$PWD/cargo .ci/install-or-update-rust-deps.sh
+      - run: CARGO_HOME=$PWD/cargo make
+      - save_cache:
+          key: cargo-build-cache
+          paths:
+            - cargo
 
   test:
     docker:
-      - image: rust
+      - image: rustlang/rust:nightly
     steps:
-      - run: rustup toolchain install nightly && rustup default nightly
       - run: rustup component add rust-src
       - checkout
       - run: make test
 
   lint:
     docker:
-      - image: rust
+      - image: rustlang/rust:nightly
     steps:
-      - run: rustup toolchain install nightly && rustup default nightly
+      - restore_cache:
+          keys:
+            - cargo-lint-cache
       - run: rustup component add rust-src
-      - run: rustup component add rustfmt || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
-      - run: rustup component add clippy || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
+      - run: rustup component add rustfmt || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
+      - run: rustup component add clippy || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
       - checkout
-      - run: .ci/install-or-update-rust-deps.sh
+      - run: CARGO_HOME=/cargo-cache .ci/install-or-update-rust-deps.sh
       - run: make format
-      - run: make clippy
+      - run: CARGO_HOME=/cargo-cache make clippy
+      - save_cache:
+          key: cargo-lint-cache
+          paths:
+            - /cargo-cache
 
 workflows:
   version: 2
