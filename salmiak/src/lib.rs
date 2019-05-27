@@ -1,9 +1,6 @@
 #![cfg_attr(target_arch = "aarch64", no_std)]
 #![cfg_attr(target_arch = "aarch64", deny(warnings))]
-#![cfg_attr(
-    target_arch = "aarch64",
-    feature(global_asm, asm, alloc, alloc_error_handler)
-)]
+#![cfg_attr(target_arch = "aarch64", feature(global_asm, asm, alloc_error_handler))]
 #![cfg_attr(not(target_arch = "aarch64"), allow(dead_code, unused_imports))]
 
 #[cfg(target_arch = "aarch64")]

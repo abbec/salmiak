@@ -1,5 +1,7 @@
 # 🖤 Salmiak
 
+[![CircleCI](https://circleci.com/gh/abbec/salmiak.svg?style=svg)](https://circleci.com/gh/abbec/salmiak)
+
 A lightweight OS in library form to create games for the Pi
 like in the old days (a'la Nintendo 64).
 

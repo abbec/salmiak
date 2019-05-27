@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: rust
+    steps:
+      - run: rustup toolchain install nightly && rustup default nightly
+      - run: rustup component add rust-src llvm-tools-preview
+      - checkout
+      - run: .ci/install-or-update-rust-deps.sh
+      - run: make
+
+  test:
+    docker:
+      - image: rust
+    steps:
+      - run: rustup toolchain install nightly && rustup default nightly
+      - run: rustup component add rust-src
+      - checkout
+      - run: make test
+
+  lint:
+    docker:
+      - image: rust
+    steps:
+      - run: rustup toolchain install nightly && rustup default nightly
+      - run: rustup component add rust-src
+      - run: rustup component add rustfmt || cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
+      - run: rustup component add clippy || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
+      - checkout
+      - run: .ci/install-or-update-rust-deps.sh
+      - run: make format
+      - run: make clippy
+
+workflows:
+  version: 2
+  build_test_lint:
+    jobs:
+      - build
+      - test
+      - lint
