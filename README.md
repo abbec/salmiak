@@ -1,7 +1,7 @@
 # 🖤 Salmiak
 
 [![CircleCI](https://circleci.com/gh/abbec/salmiak.svg?style=svg)](https://circleci.com/gh/abbec/salmiak)
-![Matrix](https://img.shields.io/matrix/salmiak:matrix.org.svg?label=Chat%20%40%20%23salmiak%3Amatrix.org&style=for-the-badge)
+[![Matrix](https://img.shields.io/matrix/salmiak:matrix.org.svg?label=Chat%20%40%20%23salmiak%3Amatrix.org&style=for-the-badge)](https://matrix.to/#/#salmiak:matrix.org)
 
 A lightweight OS in library form to create games for the Pi
 like in the old days (a'la Nintendo 64).
