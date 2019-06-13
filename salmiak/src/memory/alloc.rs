@@ -5,7 +5,7 @@ use core::{
 };
 
 #[cfg(target_arch = "aarch64")]
-pub fn create_child_allocator<T: Allocator>(parent: Option<&Allocator>, size: usize) -> T {
+pub fn create_child_allocator<T: Allocator>(parent: Option<&dyn Allocator>, size: usize) -> T {
     let mem = match parent {
         Some(a) => unsafe { a.alloc(Layout::from_size_align_unchecked(size, 16)) as usize },
         None => unsafe {

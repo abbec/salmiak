@@ -90,7 +90,7 @@ impl Gpu {
         frame_buffer: FrameBuffer,
         resolution: Size,
         pitch: u32,
-        allocator: &Allocator,
+        allocator: &dyn Allocator,
     ) -> Gpu {
         unsafe {
             let sz = frame_buffer.size as usize;
@@ -183,7 +183,7 @@ impl Gpu {
     }
 }
 
-pub fn init(width: u32, height: u32, allocator: &Allocator) -> Result<Gpu, SalmiakError> {
+pub fn init(width: u32, height: u32, allocator: &dyn Allocator) -> Result<Gpu, SalmiakError> {
     sprintln!("initializing GPU...");
     sprintln!("* creating {}x{} framebuffer...", width, height);
 

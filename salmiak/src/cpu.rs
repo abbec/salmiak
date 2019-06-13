@@ -37,7 +37,7 @@ pub unsafe extern "C" fn handle_irq() {
 
     let pending_irq = (0x4000_0060 as *mut u32).read_volatile(); // TODO: What does this address point to
     match pending_irq {
-        0x01...0x8 => timer::handle_timer_interrupt(),
+        0x01..=0x8 => timer::handle_timer_interrupt(),
         _ => sprintln!("unknown IRQ type: {}", pending_irq),
     }
     enable_irq();
