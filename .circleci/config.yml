@@ -34,7 +34,7 @@ jobs:
             - cargo-lint-cache
       - run: rustup component add rust-src
       - run: rustup component add rustfmt || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
-      - run: rustup component add clippy || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
+      - run: rustup component add clippy || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
       - checkout
       - run: CARGO_HOME=/cargo-cache .ci/install-or-update-rust-deps.sh
       - run: make format
