@@ -9,11 +9,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
+            - cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}
             - cargo-build-cache
       - run: CARGO_HOME=$PWD/cargo .ci/install-or-update-rust-deps.sh
       - run: CARGO_HOME=$PWD/cargo make
       - save_cache:
-          key: cargo-build-cache
+          key: cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
           paths:
             - cargo
 
@@ -31,16 +33,18 @@ jobs:
     steps:
       - restore_cache:
           keys:
+            - cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
+            - cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}
             - cargo-lint-cache
       - run: rustup component add rust-src
       - run: rustup component add rustfmt || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
-      - run: rustup component add clippy || cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
+      - run: rustup component add clippy || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
       - checkout
       - run: CARGO_HOME=/cargo-cache .ci/install-or-update-rust-deps.sh
       - run: make format
       - run: CARGO_HOME=/cargo-cache make clippy
       - save_cache:
-          key: cargo-lint-cache
+          key: cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
           paths:
             - /cargo-cache
 
