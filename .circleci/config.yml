@@ -1,52 +1,46 @@
 version: 2.1
 
+commands:
+  rust-nix:
+    description: "Run a make command in a rust nix shell"
+    parameters:
+      target:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run:
+          name: Set up cachix
+          command: |
+            nix-env -iA cachix -f https://cachix.org/api/v1/install
+            cachix use abbec
+      - run:
+          name: Make target "<< parameters.target >>"
+          command: nix-shell .ci/shell.nix --run "make<<# parameters.target >> << parameters.target >><</ parameters.target >>"
+      - run:
+          name: Update cachix
+          command: nix-store -qR --include-outputs $(nix-instantiate .ci/shell.nix) | cachix push abbec
+
 jobs:
   build:
     docker:
-      - image: rustlang/rust:nightly
+      - image: nixos/nix
     steps:
-      - run: rustup component add rust-src llvm-tools-preview
-      - checkout
-      - restore_cache:
-          keys:
-            - cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
-            - cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}
-            - cargo-build-cache
-      - run: CARGO_HOME=$PWD/cargo .ci/install-or-update-rust-deps.sh
-      - run: CARGO_HOME=$PWD/cargo make
-      - save_cache:
-          key: cargo-build-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
-          paths:
-            - cargo
+      - rust-nix
 
   test:
     docker:
-      - image: rustlang/rust:nightly
+      - image: nixos/nix
     steps:
-      - run: rustup component add rust-src
-      - checkout
-      - run: make test
+      - rust-nix:
+          target: "test"
 
   lint:
     docker:
-      - image: rustlang/rust:nightly
+      - image: nixos/nix
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
-            - cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}
-            - cargo-lint-cache
-      - run: rustup component add rust-src
-      - run: rustup component add rustfmt || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rustfmt/ --force rustfmt
-      - run: rustup component add clippy || CARGO_HOME=/cargo-cache cargo install --git https://github.com/rust-lang/rust-clippy/ --force clippy
-      - run: CARGO_HOME=/cargo-cache .ci/install-or-update-rust-deps.sh
-      - run: make format
-      - run: CARGO_HOME=/cargo-cache make clippy
-      - save_cache:
-          key: cargo-lint-cache-{{ checksum ".ci/install-or-update-rust-deps.sh" }}-{{ .Environment.CACHE_VERSION }}
-          paths:
-            - /cargo-cache
+      - rust-nix:
+          target: "clippy"
 
 workflows:
   version: 2

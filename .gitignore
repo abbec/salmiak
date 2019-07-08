@@ -3,3 +3,4 @@ target/
 toolchain-build/
 qemu-build/
 kernel8.img
+kernel8.debug.img
