@@ -9,11 +9,23 @@ like in the old days (a'la Nintendo 64).
 `salmiak` is the OS library for interacting with the Raspberry Pi 3
 hardware and `sneka` is the proof of concept game.
 
-## 🔧 Environment Setup
+## 🔧 Environment Setup (Using Nix)
+
+Using Nix means that you have a repeatable setup that works on any (Unix) machine and you do not
+have to modify the state of the machine since the environment of the nix shell is dropped when it is
+closed. Neat, huh!?
+
+- Install [Nix](https://nixos.org/nix/)
+- run `nix-shell` in the root of the repo and you will get a shell with everything needed (inluding
+  QEMU).
+
+## 🔧 Environment Setup (Not using Nix)
 
 - Install [Rust](https://rustup.rs/) and the nightly toolchain
-- Add src and llvm-tools (to nightly): `$ rustup component add rust-src llvm-tools-preview`
-- Install cargo binutils and cargo xbuild: `$ cargo install cargo-xbuild cargo-binutils`
+- Add src (to nightly): `$ rustup component add rust-src`
+- Install cargo xbuild: `$ cargo install cargo-xbuild`
+- Make sure you have `llvm-objcopy`. If the executable is not called that, you can provide a
+  variable to the make command below like `make LLVM-OBJCOPY=my-objcopy`.
 
 ## 🚜 Building the Code
 
