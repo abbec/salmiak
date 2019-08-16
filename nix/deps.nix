@@ -3,7 +3,7 @@
 let
   moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/master.tar.gz);
   nixpkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
-  rustWithComponents = (nixpkgs.rustChannelOf { date = "2019-07-18"; channel = "nightly"; }).rust.override {
+  rustWithComponents = (nixpkgs.rustChannelOf { date = "2019-08-15"; channel = "nightly"; }).rust.override {
         extensions = [
           "rust-src"
           "clippy-preview"
