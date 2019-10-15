@@ -31,6 +31,9 @@ pub extern "C" fn print_unhandled_exception(tp: u32, esr: u32, elr: u32, far: u3
     );
 }
 
+/// # Safety
+///
+/// This function is unsafe since it is called from C and calling C functions
 #[no_mangle]
 pub unsafe extern "C" fn handle_irq() {
     disable_irq();

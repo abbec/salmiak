@@ -907,7 +907,7 @@ mod tests {
 
     #[test]
     fn get_arm_memory() {
-        let mut arm_mem: ARMMemory = Default::default();;
+        let mut arm_mem: ARMMemory = Default::default();
         let mut res = MailboxPropertyBufferBuilder::new();
         res.get_arm_memory(&mut arm_mem);
 
@@ -918,5 +918,4 @@ mod tests {
         assert_eq!(res.mbox[3], 8); // request length
         assert_eq!(res.mbox[4], 0); // reserved for something
     }
-
 }
